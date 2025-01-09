@@ -3,7 +3,7 @@
 
 int main(int argc, char *argv[]){
     int rank;
-    char str[]="HELLO";
+    char str[]="UdiTA";
 
     MPI_Init(&argc, &argv);
 
