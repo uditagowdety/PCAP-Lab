@@ -13,11 +13,11 @@ int main(int argc, char* argv[]){
         printf("enter a value in master process: ");
         scanf("%d",&x);
         MPI_Send(&x,1,MPI_INT,1,1,MPI_COMM_WORLD);
-        fprintf(stdout,"i have sent %d from process 0\n",x);
+        fprintf(stdout,"i have sent %d from process 0 (master process)\n",x);
         fflush(stdout);
     } else {
         MPI_Recv(&x,1,MPI_INT,0,1,MPI_COMM_WORLD,&status);
-        fprintf(stdout,"i have received %d in process 1\n",x);
+        fprintf(stdout,"i have received %d in process 1 (child process) \n",x);
         fflush(stdout);
     }
 
