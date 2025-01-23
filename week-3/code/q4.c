@@ -1,11 +1,13 @@
+// MPI Program to concatenate two strings (s1 and s2) in an alternating character-wise manner using N processes.
+// The strings are divided equally among all processes. Each process alternates characters from s1 and s2 and sends the result back to the root process.
+// Root process gathers the results and prints the final alternating concatenated string.
+
 #include "mpi.h"
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
 
 int main(int argc, char* argv[]) {
-    int rank, size;
-    int str_len, sub_len;
+    int rank, size, str_len, sub_len;
     char *s1 = NULL, *s2 = NULL, *result = NULL;
     char *sub_s1 = NULL, *sub_s2 = NULL, *sub_result = NULL;
 
@@ -17,10 +19,7 @@ int main(int argc, char* argv[]) {
         printf("Enter the length of the strings (divisible by %d): ", size);
         scanf("%d", &str_len);
 
-        if (str_len % size != 0) {
-            printf("Error: The string length must be divisible by the number of processes.\n");
-            MPI_Abort(MPI_COMM_WORLD, 1);
-        }
+        if (str_len % size != 0) MPI_Abort(MPI_COMM_WORLD, 1);
 
         s1 = (char *)malloc((str_len + 1) * sizeof(char));
         s2 = (char *)malloc((str_len + 1) * sizeof(char));
@@ -33,7 +32,6 @@ int main(int argc, char* argv[]) {
     }
 
     MPI_Bcast(&str_len, 1, MPI_INT, 0, MPI_COMM_WORLD);
-
     sub_len = str_len / size;
 
     sub_s1 = (char *)malloc((sub_len + 1) * sizeof(char));
@@ -49,23 +47,16 @@ int main(int argc, char* argv[]) {
     }
     sub_result[2 * sub_len] = '\0'; 
 
-    if (rank == 0) {
-        result = (char *)malloc((str_len * 2 + 1) * sizeof(char)); 
-    }
+    if (rank == 0) result = (char *)malloc((str_len * 2 + 1) * sizeof(char)); 
 
     MPI_Gather(sub_result, sub_len * 2, MPI_CHAR, result, sub_len * 2, MPI_CHAR, 0, MPI_COMM_WORLD);
 
     if (rank == 0) {
         printf("Resultant string: %s\n", result);
-
-        free(s1);
-        free(s2);
-        free(result);
+        free(s1); free(s2); free(result);
     }
 
-    free(sub_s1);
-    free(sub_s2);
-    free(sub_result);
+    free(sub_s1); free(sub_s2); free(sub_result);
 
     MPI_Finalize();
     return 0;
