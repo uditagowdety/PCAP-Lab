@@ -1,3 +1,8 @@
+/*
+    Task:
+    Compute the sum of factorials of numbers input by each process, with the root process gathering and summing them.
+    MPI_Scatter and MPI_Reduce are used to distribute input and collect the sum.
+*/
 #include "mpi.h"
 #include <stdio.h>
 #include <stdlib.h>
