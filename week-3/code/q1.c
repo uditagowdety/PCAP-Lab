@@ -11,34 +11,29 @@ int factorial(int n) {
 }
 
 int main(int argc, char* argv[]) {
-    int rank, size;
-    int x;
-    int* numbers = NULL;
+    int rank, size, x, sum_of_factorials = 0;
 
     MPI_Init(&argc, &argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
-    MPI_Status status;
 
     if (rank == 0) {
-        numbers = (int*)malloc(sizeof(int) * (size - 1)); 
-        
+        int* numbers = (int*)malloc(sizeof(int) * (size - 1));
         for (int i = 1; i < size; i++) {
             printf("Enter value for process %d: ", i);
             scanf("%d", &numbers[i - 1]);
         }
+        MPI_Scatter(numbers, 1, MPI_INT, &x, 1, MPI_INT, 0, MPI_COMM_WORLD);
+        free(numbers);
+    } else {
+        MPI_Scatter(NULL, 1, MPI_INT, &x, 1, MPI_INT, 0, MPI_COMM_WORLD);
     }
 
-    MPI_Scatter(numbers, 1, MPI_INT, &x, 1, MPI_INT, 0, MPI_COMM_WORLD);
-
     int fact_result = factorial(x);
-
-    int sum_of_factorials = 0;
     MPI_Reduce(&fact_result, &sum_of_factorials, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
 
     if (rank == 0) {
         printf("Sum of factorials: %d\n", sum_of_factorials);
-        free(numbers);
     }
 
     MPI_Finalize();
