@@ -1,0 +1,6 @@
+- What is the role of dim3 threadsPerBlock and dim3 numBlocks in the kernel launch?
+- How do you index the elements of the matrix in the kernel, and why is it necessary to use both threadIdx and blockIdx?
+- What would happen if you didn't use cudaMemcpy to copy the matrices between the host and the device?
+- How does the kernel handle the transpose operation? Explain in terms of how threads are assigned to work on matrix elements.
+- What do cudaMalloc and cudaFree do in this code?
+- What are the advantages of using CUDA for matrix transposition over a traditional CPU approach?
