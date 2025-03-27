@@ -90,7 +90,7 @@ int main(){
 
     printf("\nresulting vector Y:\n");
     for (int i = 0; i < m; i++) {
-        printf("%d\n", y[i]);
+        printf("%d\n ", y[i]);
     }
     printf("\n");
 
